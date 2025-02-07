@@ -1,42 +1,45 @@
-import java.io.*;
 import java.util.*;
 
 class Solution {
-    private Set<Integer> b = new HashSet<>();
-    private int answer = 0;
     
-    public int isPrime(int n){
-        if (n <= 1)
-            return 0;
-        for (int i = 2; i <= (int)Math.sqrt(n); i++){
-            if (n % i == 0)
-                return 0;
+    //소수 판별 함수
+    private static boolean isPrime(int a){
+        if (a < 2)
+            return false;
+        for (int i = 2; i <= Math.sqrt(a); i++){
+            if (a % i == 0)
+                return false;
         }
-        return 1;
-    }
-    
-    public void BFS(String [] s,  String x, boolean [] used){
-        if (!x.isEmpty()) {
-            b.add(Integer.parseInt(x));
-        }
-        for (int i = 0; i < s.length; i++){
-            if (!used[i]){
-                used[i] = true;
-                BFS(s,x + s[i],used);
-                used[i] = false;
-            }
-        }
+        return true;
     }
     
     public int solution(String numbers) {
-        String [] s = numbers.split("");
-        boolean[] used = new boolean [s.length];
-        BFS(s, "", used);
-        for (int n : b){
-            if (isPrime(n) == 1) {
+        HashSet<Integer> num = new HashSet<>();
+        boolean [] visited = new boolean [numbers.length()];
+        
+        makenum("", numbers, visited, num);
+        
+        int answer = 0;
+        
+        for (int n : num){
+            if (isPrime(n))
                 answer++;
+        }
+            
+        return answer;
+      }
+    
+    private void makenum(String x, String numbers, boolean [] visited, HashSet<Integer> num){
+        if (!x.isEmpty()){
+            num.add(Integer.parseInt(x));
+        }
+        
+        for (int i = 0; i < visited.length; i++){
+            if (!visited[i]){
+                visited[i] = true;
+                makenum(x + numbers.charAt(i), numbers, visited, num);
+                visited[i] = false;
             }
         }
-        return answer;
     }
 }
