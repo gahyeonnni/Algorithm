@@ -1,0 +1,53 @@
+import java.util.*;
+
+class Solution {
+    public String solution(String input_string) {
+        String answer = "";
+        String answer2 = "";
+        
+        HashMap <Character, Integer> hashmap = new HashMap<>();
+        for (char c : input_string.toCharArray()){
+            hashmap.put(c, hashmap.getOrDefault(c, 0) + 1);
+        }
+        
+        //외톨이 문자열 확인
+        for (char c : hashmap.keySet()){
+            List <Integer> list = new LinkedList<>(); 
+            if (hashmap.get(c) >= 2){ //2회이상 알파벳이 나타난 경우
+                for (int i = 0; i < input_string.length(); i++){
+                    if (c == input_string.charAt(i)) //알파벳 나타난 위치 list에 저장
+                        list.add(i);
+                }
+            }
+            boolean check = true;
+            for (int i = 0; i < list.size() - 1; i++){
+                if (list.get(i + 1) - list.get(i) >= 2){
+                    check = !check;
+                    break;
+                }   
+            }
+            if (!check){
+                String x = "";
+                x += c;
+                answer += x;
+            }
+        }
+        //외톨이 알파벳이 없는 경우
+        if (answer.length() == 0){
+            answer += "N";
+        }
+        //정렬하기 위해서 배열에 넣어주기
+        String [] ans = new String [answer.length()];
+        for (int i = 0; i < answer.length(); i++){
+            String x = "";
+            ans[i] = x + answer.charAt(i);
+        }
+        //알파벳순으로 정렬
+        Arrays.sort(ans);
+        //출력하기 위해서 바꿔주기 
+        for (int i = 0; i < ans.length; i++){
+            answer2 += ans[i];
+        }
+        return answer2;
+    }
+}
