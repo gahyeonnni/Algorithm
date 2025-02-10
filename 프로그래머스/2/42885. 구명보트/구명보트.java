@@ -1,33 +1,21 @@
-import java.io.*;
 import java.util.*;
 
 class Solution {
     public int solution(int[] people, int limit) {
         int answer = 0;
         Arrays.sort(people);
-        Stack<Integer> stack = new Stack<>();
-        Queue<Integer>queue = new LinkedList<>();
-        for (int i = 0; i < people.length; i++){
-            int x = people[i];
-            stack.push(x);
-            queue.add(x);
-        }
-        int a = 0;
-        int b = people.length;
-        while (b > a && !stack.isEmpty()&& !queue.isEmpty()) {
-            if (stack.peek() + queue.peek() > limit){
-                stack.pop();
-                a++;
+        int index = 0;
+        for (int i = people.length - 1; i >= 0; i--){
+            if (index > i)
+                break;
+            if (people[i] + people[index] > limit)
                 answer++;
-            }
-            else {
-                stack.pop();
-                queue.remove();
-                a++;
-                b--;
+            else{
+                index++;
                 answer++;
             }
         }
+        
         return answer;
     }
 }
