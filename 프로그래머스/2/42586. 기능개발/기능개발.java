@@ -1,41 +1,38 @@
-import java.io.*;
 import java.util.*;
 
 class Solution {
     public int[] solution(int[] progress, int[] speeds) {
-        int[] answer = new int [progress.length];
-        int [] result = new int [progress.length];
+        Queue <Integer> queue = new LinkedList<>();
         
-        int num = 0;
-        for (int key : progress){
-            int a = 0;
-            int b = speeds[num];
-            while (key < 100) {
-                key += b;
-                a++;
+        for (int i = 0; i < progress.length; i++){
+            int mont = 0;
+            while (progress[i] < 100){
+                progress[i] += speeds[i];
+                mont++;
             }
-            result[num] = a;
-            num++;
+            queue.add(mont);
         }
         
-        int n = 0;
-        int i = 0;
-
-        while (i < result. length) {
-            int x = 1;
-            for (int j = i + 1; j < result.length; j++) {
-                if (result[j] <= result[i]) {
-                    x++;
-                }
-                else
-                    break;
+        List<Integer> list = new LinkedList<>();
+        
+        while (!queue.isEmpty()){
+            int x = queue.poll();
+            int check = 1;
+            
+            while (!queue.isEmpty() && queue.peek() <= x){
+                check++;
+                queue.poll();
             }
-            answer[n] = x;
-            n++;
-            i = i + x;
+            
+            list.add(check);
         }
         
-        int[] answer2 = Arrays.copyOf(answer, n);
-        return answer2;
+        int [] answer = new int [list.size()];
+        int index = 0;
+        for (int x : list){
+            answer[index++] = x;
+        }
+        
+        return answer;
     }
 }
