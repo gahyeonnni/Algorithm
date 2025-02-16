@@ -1,29 +1,31 @@
-import java.io.*;
 import java.util.*;
 
 class Solution {
     public int solution(int[][] sizes) {
         int answer = 0;
-        int max1 = sizes[0][0];
-        int max2 = sizes[0][1];
-        int [] size = new int [sizes.length];
-        for (int i = 1; i < sizes.length; i++){
-            if (sizes[i][0] > max1)
-                max1 = sizes[i][0];
-            if (sizes[i][1] > max2)
-                max2 = sizes[i][1];
-        }
+        int galo = 0;
+        int selo = 0;
+        //회전 시킨 후 
         for (int i = 0; i < sizes.length; i++){
-            int a = Math.min(sizes[i][0], sizes[i][1]);
-            size[i] = a;
+            galo = Math.max(sizes[i][0], galo);
+            selo = Math.max(sizes[i][1], selo);
         }
-        int max3 = size[0];
-        for (int i = 1; i < size.length; i++) {
-            if (max3 < size[i])
-                max3 = size[i];
+        if (galo > selo){
+            for (int i = 0; i < sizes.length; i++){
+                if (sizes[i][0] > sizes[i][1])
+                    answer = Math.max(sizes[i][1] * galo, answer);
+                else
+                    answer = Math.max(sizes[i][0] * galo, answer);
+            }
         }
-        int fmax = Math.max(max1, max2);
-        answer = fmax * max3;
+        else {
+            for (int i = 0; i < sizes.length; i++){
+                if (sizes[i][0] > sizes[i][1])
+                    answer = Math.max(sizes[i][1] * selo, answer);
+                else
+                    answer = Math.max(sizes[i][0] * selo, answer);
+            }
+        }
         return answer;
     }
 }
