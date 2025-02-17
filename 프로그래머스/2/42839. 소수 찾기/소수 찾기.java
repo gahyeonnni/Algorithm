@@ -1,45 +1,45 @@
 import java.util.*;
 
 class Solution {
+    private static int answer = 0;
+    private static HashSet <Integer> hash;
     
-    //소수 판별 함수
-    private static boolean isPrime(int a){
+    private static boolean find (int a){
         if (a < 2)
             return false;
+        
         for (int i = 2; i <= Math.sqrt(a); i++){
             if (a % i == 0)
                 return false;
         }
+        
         return true;
     }
     
-    public int solution(String numbers) {
-        HashSet<Integer> num = new HashSet<>();
-        boolean [] visited = new boolean [numbers.length()];
-        
-        makenum("", numbers, visited, num);
-        
-        int answer = 0;
-        
-        for (int n : num){
-            if (isPrime(n))
-                answer++;
-        }
-            
-        return answer;
-      }
-    
-    private void makenum(String x, String numbers, boolean [] visited, HashSet<Integer> num){
+    private static void CHECK (String num, boolean [] a, String x) {
         if (!x.isEmpty()){
-            num.add(Integer.parseInt(x));
+            hash.add(Integer.parseInt(x));
         }
         
-        for (int i = 0; i < visited.length; i++){
-            if (!visited[i]){
-                visited[i] = true;
-                makenum(x + numbers.charAt(i), numbers, visited, num);
-                visited[i] = false;
+        for (int i = 0; i < num.length(); i++){
+            if (!a[i]){
+                a[i] = true;
+                CHECK(num, a, x + num.charAt(i));
+                a[i] = false;
             }
         }
+    }
+    
+    public int solution(String numbers) {
+        hash = new HashSet<>();
+        boolean [] nums = new boolean [numbers.length()];
+        String x = "";
+        CHECK(numbers, nums, x);
+        for (int b : hash){
+            if (find(b)){
+                 answer++;
+            }
+        }
+        return answer;
     }
 }
