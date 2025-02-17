@@ -26,47 +26,25 @@ class Solution {
             if (index3[a3] == answers[i])
                 answer3++;
         }
+        int [] ans = new int [3];
+        ans[0] = answer1;
+        ans[1] = answer2;
+        ans[2] = answer3;
         
-        int [] answer = {};
-        if (answer1 == answer2 && answer2 == answer3){
-            answer=  new int [3];
-            answer[0] = 1;
-            answer[1] = 2;
-            answer[2] = 3;
+        int maxnum = 0;
+        maxnum = Math.max(answer1, Math.max(answer2, answer3));
+        
+        List <Integer> list = new LinkedList<>();
+        for (int i = 0; i < ans.length; i++){
+            if (ans[i] == maxnum)
+                list.add(i+1);
         }
         
-        if (answer1 == answer2 && answer2 > answer3){
-            answer = new int [2];
-            answer[0] = 1;
-            answer[1] = 2;
+        int [] answer = new int [list.size()];
+        for (int i = 0; i < list.size(); i++){
+            answer[i] = list.get(i);
         }
         
-        if (answer1 == answer3 && answer1 > answer2){
-            answer = new int [2];
-            answer[0] = 1;
-            answer[1] = 3;
-        }
-        
-        if (answer2 == answer3 && answer2 > answer1){
-            answer = new int [2];
-            answer[0] = 2;
-            answer[1] = 3;
-        }
-        
-        if (answer1 > answer2 && answer1 > answer3){
-            answer = new int [1];
-            answer[0] = 1;
-        }
-        
-        if (answer2 > answer3 && answer2 > answer1){
-            answer = new int [1];
-            answer[0] = 2;
-        }
-        
-        if (answer3 > answer1 && answer3 > answer2){
-            answer = new int [1];
-            answer[0] = 3;
-        }
         return answer;
     }
 }
