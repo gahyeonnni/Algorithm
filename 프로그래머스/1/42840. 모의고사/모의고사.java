@@ -19,23 +19,54 @@ class Solution {
             int a2 = i % 8;
             int a3 = i % 10;
             
-            if (answers[i] == index1[a1])
+            if (index1[a1] == answers[i])
                 answer1++;
-            if (answers[i] == index2[a2])
+            if (index2[a2] == answers[i])
                 answer2++;
-            if (answers[i] == index3[a3])
+            if (index3[a3] == answers[i])
                 answer3++;
         }
         
-        int[] result = new int[3];
-        int index = 0;
-
-        int maxScore = Math.max(answer1, Math.max(answer2, answer3));
-
-        if (answer1 == maxScore) result[index++] = 1;
-        if (answer2 == maxScore) result[index++] = 2;
-        if (answer3 == maxScore) result[index++] = 3;
-
-        return Arrays.copyOf(result, index);
+        int [] answer = {};
+        if (answer1 == answer2 && answer2 == answer3){
+            answer=  new int [3];
+            answer[0] = 1;
+            answer[1] = 2;
+            answer[2] = 3;
+        }
+        
+        if (answer1 == answer2 && answer2 > answer3){
+            answer = new int [2];
+            answer[0] = 1;
+            answer[1] = 2;
+        }
+        
+        if (answer1 == answer3 && answer1 > answer2){
+            answer = new int [2];
+            answer[0] = 1;
+            answer[1] = 3;
+        }
+        
+        if (answer2 == answer3 && answer2 > answer1){
+            answer = new int [2];
+            answer[0] = 2;
+            answer[1] = 3;
+        }
+        
+        if (answer1 > answer2 && answer1 > answer3){
+            answer = new int [1];
+            answer[0] = 1;
+        }
+        
+        if (answer2 > answer3 && answer2 > answer1){
+            answer = new int [1];
+            answer[0] = 2;
+        }
+        
+        if (answer3 > answer1 && answer3 > answer2){
+            answer = new int [1];
+            answer[0] = 3;
+        }
+        return answer;
     }
 }
