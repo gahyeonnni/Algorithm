@@ -1,25 +1,21 @@
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
 
 class Solution {
-    static char[] alphabet= {'A','E','I','O','U'};
-    static ArrayList<String> list;
-    
-    public int solution(String word) {
-        list= new ArrayList<>();
-        int answer = 0;
-        
-        combination(0, "");
-        answer= list.indexOf(word)+1;
-        
-        return answer;
-    }
-    
-    public void combination(int index, String str){
-        if(index>=5) return;
-        for(int i=0; i<alphabet.length; i++){
-            list.add(str+alphabet[i]);
-            combination(index+1, str+alphabet[i]);
+    private static String [] alpha = {"A", "E", "I", "O", "U"};
+    public static void make(int a, List <String> list, String x){
+        if (a >= 5)
+            return;
+        for (int i = 0; i < alpha.length; i++){
+            list.add( x + alpha[i]);
+            make(a + 1, list, x + alpha[i]);
         }
+    }
+    public int solution(String word) {
+        int answer = 0;
+        List <String> list = new LinkedList<>();
+        String x = "";
+        make(0, list, x);
+        answer = list.indexOf(word) + 1;
+        return answer;
     }
 }
