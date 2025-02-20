@@ -3,24 +3,22 @@ import java.util.*;
 class Solution {
     boolean solution(String s) {
         boolean answer = true;
-        if (s.length() == 1)
-            return false;
-        Stack <String> stack = new Stack<>();
+        Stack <Character> stack = new Stack<>();
         for (int i = 0; i < s.length(); i++){
-          String x = String.valueOf(s.charAt(i));
-            if(x.equals("("))
-                stack.push(x);
+            char a = s.charAt(i);
+            if (a == '(')
+                stack.push(a);
             else {
-                if (!stack.isEmpty() && stack.peek().equals("("))
+                if (stack.isEmpty())
+                    return false;
+                if (stack.peek() == a)
+                    return false;
+                if (stack.peek() == '(')
                     stack.pop();
-                else if (!stack.isEmpty() && stack.peek().equals(")"))
-                    return false;
-                else if (stack.isEmpty())
-                    return false;
             }
         }
         if (!stack.isEmpty())
-            answer = !answer;
+            answer = false;
         return answer;
     }
 }
