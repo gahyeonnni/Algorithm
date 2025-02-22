@@ -2,23 +2,26 @@ import java.util.*;
 
 class Solution {
     private static int answer = 0;
+    private static boolean [] visit;
     
-    private static void CHECK(int k, int people, int [][] num, boolean [] visit){
+    private static void check(int k, int [][] dungeons, boolean [] visit, int people){
+        answer = Math.max(answer, people);
         
-        answer = Math.max(people, answer);
-        
-        for (int i = 0; i < num.length; i++){
-            if (!visit[i] && k >= num[i][0]){
-                visit[i] = true;
-                CHECK(k - num[i][1], people + 1, num, visit);
-                visit[i] = false;
+        for (int i = 0; i < dungeons.length; i++){
+            if (!visit[i]){
+                int [] x = dungeons[i];
+                if (k >= x[0]){
+                    visit[i] = true;
+                    check(k - x[1], dungeons, visit, people + 1);
+                    visit[i] = false;
+                }
             }
         }
     }
-    
-    public int solution(int k, int[][] dun) {
-        boolean [] visit = new boolean [dun.length];
-        CHECK(k, 0, dun, visit);
+    public int solution(int k, int[][] dungeons) {
+        visit = new boolean [dungeons.length];
+        int people = 0;
+        check(k, dungeons, visit, people);
         return answer;
     }
 }
