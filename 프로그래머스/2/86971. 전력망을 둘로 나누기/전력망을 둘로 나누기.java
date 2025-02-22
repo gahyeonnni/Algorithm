@@ -1,51 +1,57 @@
 import java.util.*;
 
 class Solution {
-    private static ArrayList<Integer>[] list;
-    private static boolean [] visit;
+    private static ArrayList <Integer> [] list;
+    private static int answer = Integer.MAX_VALUE;
     
-    public static int CHECK(int a, boolean [] visited){
+    private static int BFS(int a, boolean [] visited){
+        Queue <Integer> queue = new LinkedList<>();
         visited[a] = true;
-        int count = 1;
+        queue.add(a);
         
-        for (int i : list[a]){
-            if (!visited[i]){
-                count += CHECK(i, visited);
+        int count = 0;
+        
+        while (!queue.isEmpty()){
+            int x = queue.poll();
+            count++;
+            
+            for (int next : list[x]){
+                if (!visited[next]){
+                    visited[next] = true;
+                    queue.add(next);
+                }
             }
         }
-        
         return count;
     }
     
     public int solution(int n, int[][] wires) {
-        int answer = Integer.MAX_VALUE;
-        list = new ArrayList [n + 1];
-        for (int i = 1; i <= n; i++){
+        list = new ArrayList[n+1];
+        for (int i = 1; i <= n; i++)
             list[i] = new ArrayList<>();
-        }
+        
         for (int i = 0; i < wires.length; i++){
             int [] x = wires[i];
-            int a = x[0];
-            int b = x[1];
-            list[a].add(b);
-            list[b].add(a);
+            list[x[0]].add(x[1]);
+            list[x[1]].add(x[0]);
         }
-        for (int i = 0; i < wires.length; i++){
+        
+        for (int i = 0; i < wires.length; i++) {
             int [] x = wires[i];
-            int a = x[0];
-            int b = x[1];
-            list[a].remove(Integer.valueOf(b));
-            list[b].remove(Integer.valueOf(a));
             
-            boolean [] visit = new boolean [n + 1];
-            int count = CHECK(1, visit);
+            list[x[0]].remove(Integer.valueOf(x[1]));
+            list[x[1]].remove(Integer.valueOf(x[0]));
+            
+            boolean [] visited = new boolean [n+1];
+            int count = BFS(1, visited);
             
             int diff = Math.abs(count - (n - count));
-            answer = Math.min(answer, diff);
+            answer = Math.min(diff, answer);
             
-            list[a].add(b);
-            list[b].add(a);
+            list[x[0]].add(x[1]);
+            list[x[1]].add(x[0]);
         }
+        
         return answer;
     }
 }
