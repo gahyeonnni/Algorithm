@@ -2,37 +2,30 @@ import java.util.*;
 
 class Solution {
     public long solution(int n, int[] times) {
-        int maxTime = times[0];
         
-        for (int t : times) {
-            if (t > maxTime) {
-                maxTime = t;
-            }
-        }
-        
-        long low = 1;
-        long high = (long) maxTime * n;
-        long answer = high;
-        
-        while (low <= high) {
-            long mid = (low + high) / 2;  
-            long count = 0;
-            
+        long min = 1;
+        long a = times[0];
+        for (int i : times)
+            if (i > a)
+                a = i;
+        long max = a * n;
+        long answer = max;
+        while (min <= max)
+        {
+            long mid = (min + max) / 2;
+            long people = 0;
             for (int time : times) {
-                count += mid / time;
-                if (count >= n) 
+                people += mid / time;
+                if (people >= n) 
                     break;
             }
-            
-            if (count >= n) {
+            if (people >= n){
+                max = mid -1;
                 answer = mid;
-                high = mid - 1;
-            } 
-            else {
-                low = mid + 1;
             }
+            else
+                min = mid+1;
         }
-        
         return answer;
     }
 }
