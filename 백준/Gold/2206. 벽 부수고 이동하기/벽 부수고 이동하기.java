@@ -2,59 +2,64 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    private static int[] dx = {-1, 1, 0, 0};
-    private static int[] dy = {0, 0, 1, -1};
-
-    private static int BFS(int [][] square, int x, int y){
-        boolean [][][] check = new boolean [x][y][2];
-        Queue <int []> queue = new LinkedList<>();
-        queue.add(new int [] {0,0,1,1});
-        check[0][0][1] = true;
-
-
-        while (!queue.isEmpty()){
-            int xo [] = queue.poll();
-            int nx = xo[0];
-            int ny  = xo[1];
-            int dist = xo[2];
-            int chance = xo[3];
-
-            if (nx == x - 1 && ny == y -1 )
-                return dist;
-
-            for (int i = 0; i < 4; i++){
-                int jx = nx + dx[i];
-                int jy = ny + dy[i];
-                if (jx >= 0 && jy >= 0 && jx < x && jy < y){
-                    if (square[jx][jy] == 0 && !check[jx][jy][chance]){
-                        queue.add(new int [] {jx,jy,dist + 1, chance});
-                        check[jx][jy][chance] = true;
-                    }
-                    if (square[jx][jy] == 1 && chance == 1 && !check[jx][jy][0]){
-                        queue.add(new int [] {jx,jy, dist + 1, 0});
-                        check[jx][jy][0] = true;
-                    }
-                }
-            }
-        }
-
-        return -1;
-    }
+    static int N, M;
+    static int[][] map;
+    static boolean[][][] visited;
+    static int[] tx = {-1, 1, 0, 0};
+    static int[] ty = {0, 0, -1, 1};
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String[] sq = br.readLine().split(" ");
-        int x = Integer.parseInt(sq[0]);
-        int y = Integer.parseInt(sq[1]);
-        int[][] square = new int[x][y];
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
 
-        for (int i = 0; i < x; i++){
-            String qo = br.readLine();
-            for (int j = 0; j < y; j++){
-                square[i][j] = qo.charAt(j) - '0';
+        map = new int[N][M];
+        visited = new boolean[N][M][2];
+
+        for (int i = 0; i < N; i++) {
+            String line = br.readLine();
+            for (int j = 0; j < M; j++) {
+                map[i][j] = line.charAt(j) - '0';
             }
         }
+        System.out.println(BFS());
+    }
 
-        System.out.println(BFS(square, x, y));
+    static int BFS() {
+        Queue<int[]> queue = new LinkedList<>();
+        queue.offer(new int[]{0, 0, 0, 1});
+        visited[0][0][0] = true;
+
+        while (!queue.isEmpty()) {
+            int[] px = queue.poll();
+            int a = px[0];
+            int b = px[1];
+            int broke = px[2];
+            int dist = px[3];
+
+            if (a == N - 1 && b == M-1) {
+                return dist;
+            }
+
+            for (int i = 0; i < 4; i++) {
+                int dx = a + tx[i];
+                int dy = b + ty[i];
+
+                if (dx < 0 || dy< 0 || dx >= N || dy >= M)
+                    continue;
+
+                if (map[dx][dy] == 0 && !visited[dx][dy][broke]) {
+                    visited[dx][dy][broke] = true;
+                    queue.offer(new int [] {dx,dy,broke,dist + 1});
+                }
+
+                if (map[dx][dy] == 1 && broke == 0 && !visited[dx][dy][1]) {
+                    visited[dx][dy][1] = true;
+                    queue.offer(new int [] {dx,dy,1,dist + 1});
+                }
+            }
+        }
+        return -1;
     }
 }
