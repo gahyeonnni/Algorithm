@@ -1,34 +1,39 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
 public class Main {
+    static int answer = 0;
+    static int n, s;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String [] x = br.readLine().split(" ");
-        int N = Integer.parseInt(x[0]);
-        int M = Integer.parseInt(x[1]);
-        int [] arr = new int [N];
-        String [] y = br.readLine().split(" ");
-        for (int i = 0; i < N; i++){
-            arr[i] = Integer.parseInt(y[i]);
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken());
+        s = Integer.parseInt(st.nextToken());
+        int [] array = new int [n];
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < n; i++) {
+            array[i] = Integer.parseInt(st.nextToken());
         }
 
-        int start = 0;
-        int end = 0;
-        int len = Integer.MAX_VALUE;
+        int minLen = Integer.MAX_VALUE;
+        int left = 0;
+        int right = 0;
         int sum = 0;
-        while (start <= end && end <= N) {
-            if (sum < M) {
-                if (end < N) {
-                    sum += arr[end++];
-                } else {
-                    break;
-                }
-            } else {
-                len = Math.min(len, end - start);
-                sum -= arr[start++];
+        while (true) {
+            if (sum >= s) {
+                minLen = Math.min(minLen, right - left);
+                sum -= array[left++];
             }
+            else if (right == n) {
+                break;
+            }
+            else
+                sum += array[right++];
         }
-        System.out.println(len == Integer.MAX_VALUE ? 0 : len);
+        if (minLen == Integer.MAX_VALUE)
+            answer = 0;
+        else
+            answer = minLen;
+        System.out.println(answer);
     }
 }
