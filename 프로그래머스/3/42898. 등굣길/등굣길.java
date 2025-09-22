@@ -1,40 +1,45 @@
-import java.io.*;
-import java.util.*;
+import java.io.*; 
+import java.util.*; 
 
 class Solution {
-    private static boolean[][] visited;
-    private static int m, n;
-    
-    public int solution(int mInput, int nInput, int[][] puddles) {
-        m = mInput;
-        n = nInput;
-        visited = new boolean [m][n];
-        int[][] route = new int[m][n];
-        
-        for (int[] puddle : puddles) {
-            int x = puddle[0] - 1;
-            int y = puddle[1] - 1;
-            if (x >= 0 && y >= 0 && x < m && y < n) {
-                visited[x][y] = true;
-            }
+    static final int MOD = 1000000007;
+    public int solution(int m, int n, int[][] puddles) {
+        int answer = 0; 
+        int [][] dp = new int [n+1][m+1]; 
+ 
+        for (int[] p : puddles) {
+            dp[p[1]][p[0]] = -1; 
         }
 
-        if (visited[0][0]) 
-            return 0;
         
-        route[0][0] = 1;
+        dp[1][1] = 1;
         
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                if (visited[i][j]) 
-                    continue; 
-                if (i > 0) 
-                    route[i][j] = (route[i][j] + route[i - 1][j]) % 1000000007;
-                if (j > 0) 
-                    route[i][j] = (route[i][j] + route[i][j - 1]) % 1000000007;
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= m; j++) { 
+                if (i == 1 && j == 1) 
+                        continue;  
+               
+                if (dp[i][j] == -1) {
+                    dp[i][j] = 0; 
+                    continue;
+                } 
+                
+                int a = 0; 
+                int b = 0;
+                if (dp[i-1][j] == -1)
+                    a = 0; 
+                else 
+                    a = dp[i-1][j];
+                
+                if (dp[i][j-1] == -1)
+                    b = 0; 
+                else 
+                    b = dp[i][j-1]; 
+                
+                dp[i][j]  = (a + b) % MOD;
             }
         }
-
-        return route[m - 1][n - 1];
+        answer = dp[n][m];
+        return answer;
     }
 }
