@@ -4,14 +4,14 @@ import java.util.*;
 public class Main {
     static StringTokenizer st;
     static int n, m, k;
-    static int[] array;
-    static boolean canPlace(int d) {
+    static int [] position;
+    static boolean canmove(int mid) {
         int count = 1;
-        int max = array[0];
+        int left = position[0];
         for (int i = 1; i < k; i++) {
-            if (array[i] - max >= d) {
+            if (position[i] - left >= mid) {
                 count++;
-                max = array[i];
+                left = position[i];
                 if (count >= m)
                     return true;
             }
@@ -24,48 +24,43 @@ public class Main {
         n = Integer.parseInt(st.nextToken());
         m = Integer.parseInt(st.nextToken());
         k = Integer.parseInt(st.nextToken());
-
-        array = new int[k];
+        position = new int [k];
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < k; i++) {
-            array[i] = Integer.parseInt(st.nextToken());
+            position[i] = Integer.parseInt(st.nextToken());
         }
-        Arrays.sort(array);
+        Arrays.sort(position);
 
-        int len = 1;
-        int rig = n;
+        int left = 1;
+        int right = n;
         int max = 0;
-        while (rig >= len) {
-            int mid = (len + rig) / 2;
-            if (canPlace(mid)) {
+        while (left <= right) {
+            int mid = (left + right) / 2;
+            if (canmove(mid)) {
                 max = mid;
-                len = mid + 1;
+                left = mid + 1;
             }
             else
-                rig = mid - 1;
+                right = mid - 1;
         }
-
         boolean [] check = new boolean [k];
         int count = 1;
-        int last = array[0];
+        int last = position[0];
         check[0] = true;
         for (int i = 1; i < k && count < m; i++) {
-            if (array[i] - last >= max) {
+            if (position[i] - last >= max) {
                 check[i] = true;
-                last = array[i];
+                last = position[i];
                 count++;
             }
         }
-
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < k; i++) {
-            if (check[i]) {
+            if (check[i])
                 sb.append(1);
-            }
             else
                 sb.append(0);
         }
-
         System.out.println(sb);
     }
 }
