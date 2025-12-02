@@ -5,28 +5,29 @@ public class Main {
 
     static int[] dijkstra(int start, List<List<int[]>> graph, int n) {
 
-        int[] dist = new int[n + 1];
+        int [] dist = new int [n + 1];
         Arrays.fill(dist, Integer.MAX_VALUE);
         dist[start] = 0;
 
-        PriorityQueue<int[]> pq = new PriorityQueue<>((o1, o2) -> o1[1] - o2[1]);
-        pq.add(new int[]{start, 0});
+        PriorityQueue <int []> pq = new PriorityQueue<>((o1, o2) -> o1[1] - o2[1]);
+        pq.add(new int [] {start, 0});
 
         while (!pq.isEmpty()) {
-            int[] now = pq.poll();
-            int cur = now[0];
-            int cost = now[1];
+            int [] cur = pq.poll();
+            int a = cur[0];
+            int b = cur[1];
 
-            if (dist[cur] < cost) continue;
+            if (dist[a] < b)
+                continue;
 
-            for (int[] next : graph.get(cur)) {
+            for (int [] next : graph.get(a)) {
                 int v = next[0];
                 int w = next[1];
-                int newCost = cost + w;
+                int newc = w + b;
 
-                if (newCost < dist[v]) {
-                    dist[v] = newCost;
-                    pq.add(new int[]{v, newCost});
+                if (dist[v] > newc) {
+                    dist[v] = newc;
+                    pq.add(new int [] {v, newc});
                 }
             }
         }
@@ -52,7 +53,7 @@ public class Main {
             System.out.println(0);
             return;
         }
-        
+
         List<List<int[]>> graph = new ArrayList<>();
         for (int i = 0; i <= maxNode; i++)
             graph.add(new ArrayList<>());
