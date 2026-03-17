@@ -1,61 +1,34 @@
-import java.util.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.PriorityQueue;
+import java.util.StringTokenizer;
 
 public class Main {
-    static int n;
+    static int N;
     static StringTokenizer st;
-    static int[][] array;
-
-    static boolean allclass(int[][] array, int mid) {
-        PriorityQueue<Integer> pq = new PriorityQueue<>();
-
-        for (int i = 0; i < n; i++) {
-            int start = array[i][0];
-            int end = array[i][1];
-
-            if (!pq.isEmpty() && pq.peek() <= start)
-                pq.poll();
-
-            pq.add(end);
-
-            if (pq.size() > mid) return false;
-        }
-        return true;
-    }
-
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        n = Integer.parseInt(br.readLine());
-        array = new int[n][2];
+        N = Integer.parseInt(br.readLine());
+        int[][] arr = new int[N][2];
 
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
-            int num = Integer.parseInt(st.nextToken());
-            int start = Integer.parseInt(st.nextToken());
-            int end = Integer.parseInt(st.nextToken());
-            array[i][0] = start;
-            array[i][1] = end;
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+            int c = Integer.parseInt(st.nextToken());
+            arr[i][0] = b;
+            arr[i][1] = c;
         }
 
-        Arrays.sort(array, (a, b) -> {
-            if (a[0] == b[0]) return a[1] - b[1];
-            return a[0] - b[0];
-        });
-
-        int left = 1;
-        int right = n; 
-        int answer = n;
-        while (left <= right) {
-            int mid = (left + right) / 2;
-
-            if (allclass(array, mid)) {
-                answer = mid;
-                right = mid - 1;
-            } else {
-                left = mid + 1;
+        Arrays.sort(arr, (a, b) -> a[0] - b[0]);
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+        for (int i = 0; i < N; i++) {
+            if (!pq.isEmpty() && pq.peek() <= arr[i][0]) {
+                pq.poll();
             }
+            pq.offer(arr[i][1]);
         }
-
-        System.out.println(answer);
+        System.out.println(pq.size());
     }
 }
