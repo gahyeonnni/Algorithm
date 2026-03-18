@@ -20,14 +20,13 @@ public class Main {
             arr[i][1] = c;
         }
 
-        Arrays.sort(arr, (a, b) -> a[0] - b[0]);
-        PriorityQueue<Integer> pq = new PriorityQueue<>();
+        Arrays.sort(arr, (a, b) -> a[0] - b[0]); 
+        PriorityQueue<Integer> priorityQueue = new PriorityQueue<>(); 
         for (int i = 0; i < N; i++) {
-            if (!pq.isEmpty() && pq.peek() <= arr[i][0]) {
-                pq.poll();
-            }
-            pq.offer(arr[i][1]);
+            if (!priorityQueue.isEmpty() && priorityQueue.peek() <= arr[i][0])
+                priorityQueue.poll(); 
+            priorityQueue.offer(arr[i][1]);
         }
-        System.out.println(pq.size());
+        System.out.println(priorityQueue.size());
     }
 }
