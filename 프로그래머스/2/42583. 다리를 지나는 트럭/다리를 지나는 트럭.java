@@ -1,35 +1,45 @@
-import java.util.*;
+import java.io.*; 
+import java.util.*; 
 
 class Solution {
-    public int solution(int bri, int wei, int[] truck) {
-        int answer = 0;
-        int total = 0;
-        Queue <Integer> queue1 = new LinkedList<>(); //트럭 리스트
-        Queue <int []> queue2 = new LinkedList<>(); //다리에 있는 트럭 
-        
-        for (int x : truck){
-            queue1.add(x);
+    static void plustime(Queue<int[]> queue) {
+        for (int [] a : queue)
+            a[1]++;
+    }
+    public int solution(int bridge_length, int weight, int[] truck_weights) {
+        Queue<int[]> queue = new LinkedList<>(); 
+        int time = 0;
+        int index = 0;
+        while (true) {
+            
+            if (index == truck_weights.length && queue.isEmpty()) {
+                break;
+            }
+            
+            time++; 
+            
+            plustime(queue); 
+            
+            if (queue.size() > bridge_length)
+                continue; 
+            
+             if (!queue.isEmpty() && queue.peek()[1] >= bridge_length) {
+                queue.poll();
+            }  
+            
+            int sum = 0;
+            for (int [] a : queue)
+                sum += a[0];
+            
+            
+            if (index < truck_weights.length) {
+                if (sum + truck_weights[index] <= weight) {
+                    queue.add(new int[] {truck_weights[index], 0});
+                    index++; 
+                }
+            }
+                      
         }
-        
-        while (!queue1.isEmpty() || !queue2.isEmpty()){
-            
-            answer++;
-            
-            if (!queue2.isEmpty() && queue2.peek()[1] == bri){
-                total -= queue2.poll()[0];
-            }
-            
-            if (!queue1.isEmpty() && total + queue1.peek() <= wei){
-                int a = queue1.poll();
-                total += a;
-                queue2.add(new int [] {a, 0});
-            }
-            
-            for (int [] x : queue2){
-                x[1]++;
-            }
-        }
-        
-        return answer;
+        return time;
     }
 }
