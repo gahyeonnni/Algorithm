@@ -1,25 +1,24 @@
-import java.util.*;
+import java.io.*; 
+import java.util.*; 
 
 class Solution {
     public int solution(int[] numbers, int target) {
-        int answer = 0;
-        Queue <Integer> queue = new LinkedList<>();
-        for (int i = 0; i < numbers.length; i++){
-            if (queue.isEmpty()){
-                queue.add(numbers[i]);
-                queue.add(-numbers[i]);
+        int answer = 0; 
+        List <Integer> list = new ArrayList<>();
+        list.add(numbers[0]); 
+        list.add(-numbers[0]);
+        
+        for (int i = 1; i < numbers.length; i++) {
+            List<Integer> nextList = new ArrayList<>(); 
+            for (int num : list) {
+                nextList.add(num + numbers[i]);
+                nextList.add(num - numbers[i]);
             }
-            else {
-                int a = queue.size();
-                for (int j = 0; j < a; j++){
-                    int x = queue.poll();
-                    queue.add(x + numbers[i]);
-                    queue.add(x - numbers[i]);
-                }
-            }
+            list = nextList; 
         }
-        for (int i : queue)
-            if (i == target)
+        
+        for (int k : list)
+            if (k == target)
                 answer++;
         return answer;
     }
