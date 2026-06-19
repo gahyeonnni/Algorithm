@@ -1,48 +1,46 @@
-import java.io.*;
-import java.util.*;
+import java.io.*; 
+import java.util.*; 
 
 class Solution {
-    private List <Integer> [] arr;
-    private boolean [] visited;
-    private int answer = 0;
+    private List<Integer>[] arr; 
+    private int answer = 0; 
+    private boolean [] check; 
     
-    public void BFS(int [][] com, boolean [] visited, int a){
-        Queue <Integer> queue = new LinkedList<>();
-        queue.add(a);
-        visited[a] = true;
+    private void BFS(int [][] computers, boolean [] check, int start) {
+        Queue <Integer> queue = new LinkedList<>(); 
+        queue.add(start); 
+        check[start] = true; 
         
-        while (!queue.isEmpty()){
-            int x = queue.poll();
-            
-            for (int va : arr[x]){
-                if (!visited[va]){
-                    queue.add(va);
-                    visited[va] = true;
+        while (!queue.isEmpty()) {
+            int a = queue.poll();
+            for (int va : arr[a]) {
+                if (!check[va]) {
+                    queue.add(va); 
+                    check[va] = true;
                 }
             }
         }
     }
     
-    public int solution(int n, int[][] com) {
-        arr = new LinkedList[n+1];
-        visited = new boolean [n];
+    public int solution(int n, int[][] computers) {
+        check = new boolean [n + 1]; 
+        arr = new LinkedList[n + 1]; 
         
-        for (int i = 0; i <= n; i++){
-            arr[i] = new LinkedList<>();
-        }
+        for (int i = 0; i <= n; i++)
+            arr[i] = new LinkedList<>(); 
         
-        for (int i = 0; i < com.length; i++){
-            for (int j = 0; j < com[0].length; j++){
-                if (com[i][j] == 1 && i != j){
-                    arr[i].add(j);
+        for (int i = 0; i < computers.length; i++) {
+            for (int j = 0; j < computers[0].length; j++) {
+                if (i != j && computers[i][j] == 1) {
+                    arr[i].add(j); 
                     arr[j].add(i);
                 }
             }
         }
         
         for (int i = 0; i < n; i++) {
-            if (!visited[i]) {
-                BFS(com, visited, i);
+            if (!check[i]) {
+                BFS(computers, check, i); 
                 answer++;
             }
         }
