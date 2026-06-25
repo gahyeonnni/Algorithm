@@ -1,24 +1,41 @@
-import java.util.*;
+import java.io.*; 
+import java.util.*; 
 
 class Solution {
-    private static int answer = 0;
-    
-    private static void CHECK(int k, boolean [] visit, int [][] dungeons, int a){
+    static int bfs(int k, int [][] dungeons, boolean [] check, int start, int count) {
+        Queue <int []> queue = new LinkedList<>(); 
+        queue.add(dungeons[start]);
+        check[start] = true;
         
-        answer = Math.max(a, answer);
-        
-        for (int i = 0; i < dungeons.length; i++){
-            if (!visit[i] && k >= dungeons[i][0]) {
-                visit[i] = true;
-                CHECK(k - dungeons[i][1], visit, dungeons, a + 1);
-                visit[i] = false;
+        while (!queue.isEmpty()) {
+            int [] cur = queue.poll();
+            if (cur[0] > k)
+                return count; 
+                        
+            k -= cur[1]; 
+            count++;
+            
+            int maxCount = count;
+            for (int i = 0; i < dungeons.length; i++) {
+                if (!check[i]) {
+                    check[i] = true; 
+                    maxCount = Math.max(maxCount, bfs(k, dungeons, check, i, count));
+                    check[i] = false;
+                }
             }
+            return maxCount;
         }
+        
+        return count; 
     }
     
     public int solution(int k, int[][] dungeons) {
-        boolean [] visit = new boolean [dungeons.length];
-        CHECK(k, visit, dungeons, 0);
+        int answer = -1;
+        int n = dungeons.length;
+        for (int i = 0; i < n; i++) {
+            boolean [] check = new boolean [n];
+            answer = Math.max(answer, bfs(k, dungeons, check, i, 0));
+        }
         return answer;
     }
 }
