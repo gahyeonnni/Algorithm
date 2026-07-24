@@ -1,46 +1,44 @@
-import java.util.*;
+import java.io.*; 
+import java.util.*; 
 
 class Solution {
-    private static int [][] ans;
-    
-    public int solution(int n, int w, int num) {
+    public int solution(int n, int w, int number) {
         int answer = 0;
-        int rows = (n % w == 0) ? (n / w) : (n / w) + 1;
-        ans = new int[rows][w];
-
-        int a = -1, b = -1;  
-        int index = 1;
-
-        for (int i = 0; i < rows; i++) { 
-            if (i % 2 == 0) { 
-                for (int j = 0; j < w; j++) { 
-                    if (index > n) 
-                        break;
-                    ans[(rows - 1) - i][j] = index;
-                    if (index == num) {
-                        a = (rows - 1) - i;
-                        b = j;
+        int [][] array = new int [n / w + 1][w];
+        int cur = 0;
+        int num = 1;
+        int currow = Integer.MAX_VALUE;
+        for (int i = n / w; i >= 0; i--) {
+            if (cur == 0) {
+                for (int j = 0; j < w; j++) {
+                    if (currow != Integer.MAX_VALUE && num <= n && currow == j)
+                        answer++;
+                    array[i][j] = num;
+                    if (num == number) {
+                        answer++;
+                        currow = j;
                     }
-                    index++;
+                    num++;
+                    if (num > n)
+                        return answer;
                 }
-            } 
-            else {  
-                for (int j = w - 1; j >= 0; j--) {
-                    if (index > n) 
-                        break;
-                    ans[(rows - 1) - i][j] = index;
-                    if (index == num) {
-                        a = (rows - 1) - i; 
-                        b = j;
-                    }
-                    index++;
-                }
+                cur = 1;
             }
-        }
-
-        for (int i = 0; i <= a; i++) {
-            if (ans[i][b] != 0)
-                answer++;
+            else if (cur == 1){
+                for (int j = w - 1; j >= 0; j--) {
+                    if (currow != Integer.MAX_VALUE && num <= n && currow == j)
+                        answer++;
+                    array[i][j] = num;
+                    if (num == number) {
+                        answer++;
+                        currow = j;
+                    }
+                    num++;
+                    if (num > n)
+                        return answer;
+                }
+                cur = 0;
+            }
         }
         
         return answer;
