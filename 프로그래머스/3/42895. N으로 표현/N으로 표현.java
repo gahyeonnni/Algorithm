@@ -1,0 +1,44 @@
+import java.util.*;
+
+class Solution {
+    public int solution(int N, int number) {
+        if (N == number) {
+            return 1;
+        }
+        
+        List<Set<Integer>> dp = new ArrayList<>();
+        for (int i = 0; i <= 8; i++) {
+            dp.add(new HashSet<>());
+        }
+        
+        for (int i = 1; i <= 8; i++) {
+            
+            int repeatedN = 0;
+            for (int j = 0; j < i; j++) {
+                repeatedN = repeatedN * 10 + N;
+            }
+            dp.get(i).add(repeatedN); 
+            
+            
+            for (int j = 1; j < i; j++) {
+                int k = i - j; 
+                for (int num1 : dp.get(j)) {
+                    for (int num2 : dp.get(k)) {
+                        dp.get(i).add(num1 + num2);
+                        dp.get(i).add(num1 - num2);
+                        dp.get(i).add(num1 * num2);
+                        if (num2 != 0) { 
+                            dp.get(i).add(num1 / num2);
+                        }
+                    }
+                }
+            }
+            
+            if (dp.get(i).contains(number)) {
+                return i; 
+            }
+        }
+        
+        return -1; 
+    }
+}
