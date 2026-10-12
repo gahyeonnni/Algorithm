@@ -1,19 +1,22 @@
-import java.util.*;
+import java.io.*; 
+import java.util.*; 
 
 class Solution {
-    private static int answer = 0;
     public int solution(int[] nums) {
-        HashSet <Integer> hash = new HashSet<>();
-        for (int i = 0; i < nums.length; i++){
-            hash.add(nums[i]);
+        int answer = 0;
+        int half = nums.length / 2;
+        HashMap<Integer, Integer> numandcount = new HashMap<>(); 
+        for (int n : nums) {
+            numandcount.put(n, numandcount.getOrDefault(n, 0) + 1);
         }
-        System.out.println(hash.size());
-        System.out.println(nums.length / 2);
-        if (hash.size() > (nums.length / 2)) {
-            int a =(nums.length / 2) - hash.size();
-            System.out.println(a);
-            return hash.size() + a;
-        }
-        return hash.size();
+                
+        if (numandcount.size() == half)
+            answer = half;
+        else if (numandcount.size() < half)
+            answer = numandcount.size();
+        else 
+            answer = half;
+        
+        return answer;
     }
 }
