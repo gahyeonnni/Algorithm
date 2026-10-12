@@ -1,51 +1,44 @@
+import java.io.*; 
 import java.util.*;
 
 class Solution {
-    private static int [] answer;
-    public int [] solution(String[] genres, int[] plays) {
-        HashMap <String, Integer> hash = new HashMap<>();
+    public int[] solution(String[] genres, int[] plays) {
+        HashMap<String, HashMap<Integer, Integer>> music = new HashMap<>();
+        HashMap<String, Integer> count = new HashMap<>();
         
-        for (int i = 0; i < genres.length; i++){
-            String a = genres[i];
-            int b = plays[i];
+        List <Integer> ans = new ArrayList<>();
+        
+        for (int i = 0; i < genres.length; i++) {
+            String genre = genres[i]; 
+            int play = plays[i]; 
             
-            hash.put(a, hash.getOrDefault(a, 0) + b);
+            music.put(genre, music.getOrDefault(genre, new HashMap<>()));
+            music.get(genre).put(i, play);
+            count.put(genre, count.getOrDefault(genre, 0) + play);
         }
         
-        String [][] dict = new String [hash.size()][2];
-        int index = 0;
-        for (String k : hash.keySet()){
-            dict[index][0] = k;
-            dict[index][1] = String.valueOf(hash.get(k));
-            index++;
-        }
+       List<String> genreList = new ArrayList<>(count.keySet());
+        genreList.sort((a, b) -> count.get(b) - count.get(a));
         
-        Arrays.sort(dict, (a, b) -> Integer.compare(Integer.parseInt(b[1]), Integer.parseInt(a[1])));
-        
-        Queue <Integer> finallist = new LinkedList<>();
-        
-        for (int i = 0; i < dict.length; i++) {
-            String song = dict[i][0];
-            List <int []> queue = new LinkedList<>();
-            for (int j = 0; j < genres.length; j++){
-                if (genres[j].equals(song)){
-                    queue.add(new int [] {plays[j] , j});
+        for (String gen : genreList) {
+            HashMap<Integer, Integer> songs = music.get(gen); 
+            List<Integer> idxList = new ArrayList<>(songs.keySet());
+
+            idxList.sort((a, b) -> {
+                int playA = songs.get(a);
+                int playB = songs.get(b);
+                if (playB != playA) {
+                    return playB - playA;   
                 }
-            }
-            queue.sort((a,b) -> Integer.compare(b[0], a[0]));
+                return a - b;              
+            });
             
-            if (queue.size() > 0) {
-                finallist.add(queue.get(0)[1]);
-                if (queue.size() > 1) {
-                    finallist.add(queue.get(1)[1]);
-                }
+            for (int i = 0; i < Math.min(2, idxList.size()); i++) {
+                ans.add(idxList.get(i));
             }
         }
-        int size = finallist.size();
-        int[] answer = new int[size];
-        for (int i = 0; i < size; i++) {
-            answer[i] = finallist.poll();
-        }
+        
+        int[] answer = ans.stream().mapToInt(Integer::intValue).toArray();
         return answer;
     }
 }
