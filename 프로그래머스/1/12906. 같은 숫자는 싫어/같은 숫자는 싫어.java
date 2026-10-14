@@ -1,24 +1,29 @@
 import java.util.*;
+import java.io.*; 
+
 
 public class Solution {
     public int[] solution(int []arr) {
         Stack <Integer> stack = new Stack<>();
-        for (int i = 0; i < arr.length; i++){
+        for (int a : arr) {
             if (stack.isEmpty())
-                stack.add(arr[i]);
+                stack.push(a);
             else {
-                if (stack.peek() == arr[i])
-                    continue;
-                else
-                    stack.add(arr[i]);
+                if (stack.peek() != a)
+                    stack.push(a);
             }
         }
-        Queue <Integer> queue = new LinkedList<>();
-        for (int i : stack)
-            queue.add(i);
-        int[] answer = new int [queue.size()];
-        for (int i = 0; i < answer.length; i++)
-            answer[i] = queue.poll();
+        
+        List<Integer> list = new ArrayList<>();
+        for (int s : stack)
+            list.add(s); 
+        
+        int[] answer = new int [list.size()];
+
+        
+        for (int i = 0; i < answer.length; i++) 
+            answer[i] = list.get(i);
+
         return answer;
     }
 }
