@@ -1,20 +1,21 @@
+import java.io.*; 
 import java.util.*;
 
 class Solution {
     public int solution(int[] cit) {
         int answer = 0;
-        Arrays.sort(cit);
-        int index = 0;
-        while (index <= cit[cit.length - 1]){
-            int count = 0;
-            for (int i : cit)
-                if (i >= index)
-                    count++;
-            if (count >= index)
-                index++;
-            else
-                break;
+        int len = cit.length; 
+        
+        for (int h = 0; h <= len; h++) {
+            int plus = 0; 
+            for (int i = 0; i < len; i++) {
+                if (cit[i] >= h)
+                    plus++;
+            }
+            if (plus >= h)
+                answer = h;
+            
         }
-        return index - 1;
+        return answer;
     }
 }
