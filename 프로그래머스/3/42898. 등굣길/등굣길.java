@@ -2,44 +2,53 @@ import java.io.*;
 import java.util.*; 
 
 class Solution {
-    static final int MOD = 1000000007;
-    public int solution(int m, int n, int[][] puddles) {
-        int answer = 0; 
-        int [][] dp = new int [n+1][m+1]; 
- 
-        for (int[] p : puddles) {
-            dp[p[1]][p[0]] = -1; 
-        }
+    static int [] dx = {1, 0}; 
+    static int [] dy = {0, 1};
+    static final int MOD = 1_000_000_007;          
 
+    public int solution(int m, int n, int[][] puddles) {
+        boolean [][] arr = new boolean [m][n];
+        int [][] cnt = new int [m][n];               
+        boolean [][] visited = new boolean [m][n];   
         
-        dp[1][1] = 1;
-        
-        for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <= m; j++) { 
-                if (i == 1 && j == 1) 
-                        continue;  
-               
-                if (dp[i][j] == -1) {
-                    dp[i][j] = 0; 
-                    continue;
-                } 
-                
-                int a = 0; 
-                int b = 0;
-                if (dp[i-1][j] == -1)
-                    a = 0; 
-                else 
-                    a = dp[i-1][j];
-                
-                if (dp[i][j-1] == -1)
-                    b = 0; 
-                else 
-                    b = dp[i][j-1]; 
-                
-                dp[i][j]  = (a + b) % MOD;
+        for (int [] puddle : puddles) {
+            int a = puddle[0] - 1; 
+            int b = puddle[1] - 1; 
+            if (a >= 0 && b >= 0 && a < m && b < n) {
+                arr[a][b] = true;
             }
         }
-        answer = dp[n][m];
-        return answer;
+        
+        if (arr[0][0])
+            return 0; 
+        
+        Queue <int []> queue = new ArrayDeque<>(); 
+        queue.add(new int [] {0, 0});
+        cnt[0][0] = 1;                               
+        visited[0][0] = true;                        
+        m -= 1; 
+        n -= 1;
+        
+        while (!queue.isEmpty()) {
+            int [] x = queue.poll();
+            int a = x[0]; 
+            int b = x[1];
+            
+            for (int i = 0; i < 2; i++) {
+                int newa = a + dx[i]; 
+                int newb = b + dy[i];
+                if (newa >= 0 && newb >= 0 && newa <= m && newb <= n) {
+                    if (!arr[newa][newb]) {
+                        cnt[newa][newb] = (cnt[newa][newb] + cnt[a][b]) % MOD;
+                        if (!visited[newa][newb]) {  
+                            visited[newa][newb] = true;
+                            queue.add(new int [] {newa, newb});
+                        }
+                    }
+                }
+            }
+        }
+            
+       return cnt[m][n];       
     }
 }
